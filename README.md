@@ -1,2 +1,97 @@
-# jeju-card-api-pipeline
-Python-based API data collection and data quality management pipeline using Jeju tourism card usage data.
+# 제주 내국인 관광객 카드 이용 데이터 API 연동 및 데이터 파이프라인
+
+공공데이터 API를 활용하여 제주특별자치도 내국인 관광객의 카드 이용 데이터를 자동으로 수집하고, 데이터 품질 검증 및 정제 과정을 거쳐 저장하는 Python 기반 데이터 파이프라인 프로젝트입니다.
+
+---
+
+## ✦ 프로젝트 개요
+
+### 프로젝트 목적
+
+Open API를 활용한 데이터 수집부터 품질 검증, 데이터 정제 및 저장까지의 전체 데이터 파이프라인을 구축했습니다.
+
+- Open API 연동 및 데이터 수집
+- API Pagination을 활용한 전체 데이터 자동 수집
+- JSON 데이터 처리 및 DataFrame 변환
+- 데이터 건수, 결측치, 중복 데이터 검증
+- 데이터 타입 정제
+- Raw / Final 데이터 분리 저장
+- 실행 과정 및 결과 Logging
+
+### 사용 데이터
+
+- **데이터명:** 제주특별자치도_내국인 관광객 지역, 업종, 성별, 연령대별 카드 이용 데이터
+- **제공:** 제주데이터허브 (https://jejudatahub.net/)
+- **수집 방식:** Open API
+- **조회 기간:** 2018.01 ~ 2020.12
+- **주요 기준:** 지역, 업종, 성별, 연령대, 월별
+- **주요 지표:** 이용자 수, 이용 건수, 이용 금액
+
+---
+
+## ✦ Data Pipeline
+
+```text
+API 요청
+   ↓
+JSON 데이터 수신
+   ↓
+Pagination을 통한 전체 데이터 수집
+   ↓
+DataFrame 변환
+   ↓
+데이터 품질 검증
+   ├── 데이터 건수 검증
+   ├── 결측치 검증
+   └── 중복 데이터 검증
+   ↓
+데이터 타입 정제
+   ↓
+Raw / Final 데이터 저장
+   ↓
+실행 로그 저장
+```
+---
+
+## ✦ 주요 구현 내용
+
+### 1. Open API 연동
+
+Python requests를 활용하여 제주데이터허브 Open API에 요청하고 JSON 형태의 데이터를 수집했습니다.
+
+### 2. Pagination 자동 수집
+
+API에서 제공하는 hasMore 값을 기준으로 다음 페이지 존재 여부를 확인하고, 마지막 페이지까지 데이터를 자동으로 수집했습니다.
+
+### 3. 데이터 품질 검증 및 정제
+
+- API 전체 데이터 건수와 실제 수집 건수 비교
+- 결측치 확인
+- 중복 데이터 확인
+- 데이터 타입 정제
+
+주요 컬럼은 분석 및 후속 처리에 적합하도록 데이터 타입을 변환했습니다.
+
+### 4. 데이터 저장 및 Logging
+
+수집된 원본 데이터와 정제된 최종 데이터를 분리하여 저장하고, 주요 처리 결과를 실행 로그로 기록했습니다.
+
+---
+
+## ✦ 프로젝트 구조
+
+```text
+jeju-card-api-pipeline/
+│
+├── README.md
+├── jeju_card_api_data_pipeline.ipynb
+│
+├── data/
+│   ├── raw/
+│   └── output/
+│
+├── logs/
+│
+└── docs/
+    └── api_guide.png
+```
